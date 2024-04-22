@@ -1,0 +1,44 @@
+services:
+  # Création du service BDD
+  mariadb:
+    # Sous-dossier contenant le Dockerfile 
+    build: ./db
+    # Nom de l'image créée à partir du Dockerfile
+    image: maria-db
+    # Le nom du conteneur instancié
+    container_name: maria-db
+    restart: always
+    # Montage de volumes divers
+    volumes:
+      - ${LOG_DIR_MARIADB}:/var/log/mysql
+      - ${MARIADB_DUMP_DIR}:/docker-entrypoint-initdb.d
+    environment:
+      # Configuration du mot de passe de l'utilisateur "root"
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    ports:
+      - "9806:3306"
+
+  phpmyadmin:
+    # Dépendance du conteur "phpmyadmin" au conteneur "mysql" déclaré au préalable
+    depends_on:
+      - mariadb
+    # Image docker sur laquelle se base le conteneur nommé "phpmyadmin"
+    image: phpmyadmin
+    # Démarrage automatique au lancement du moteur docker + redémarrage automatique en cas de crash
+    restart: always
+    # Nom du conteneur qui sera instancié (attention, il s'agit du même nom, ne soyez pas bernés)
+    container_name: phpmyadmin
+    # Redirection de port pour pouvoir accéder au service "phpmyadmin" en requêtant sur "localhost"
+    ports:
+      - "8080:80"
+    # Variables d'envirionnement diverses permettant d'assurer le bon fonctionnement de phpMyAdmin
+    environment:
+      # Adresse de la machine hebergeant la base de données
+      # IMPORTANT : il est possible de mettre un nom de conteneur !! Par défaut les conteneurs d'un docker compose peuvent communiquer entre eux via leur nom !
+      PMA_HOST: mariadb
+      # Mot de passe par défaut de la base de données
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+  
