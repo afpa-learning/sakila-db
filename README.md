@@ -10,7 +10,7 @@ Vous y retrouverez :
 
 ## Déploiement de la base de données Docker
 
-Pour déployer la base de données en local, exécutez la commande suivante :
+Pour déployer la base de données en local, allez dans le dossier "MySQL" ou "PGSQL" puis exécutez la commande suivante :
 ```bash
 docker compose -d
 ```
@@ -18,11 +18,13 @@ docker compose -d
 Veillez à faire attention au conflits de ports.
 Modifiez la redirection de port en fonction.
 
-## Acccès à la BDD "society"
+## Acccès à la BDD "sakila"
 
-Connexion via phpMyAdmin : [http://localhost:8080/index.php](http://localhost:8080/index.php)
+Connexion via phpMyAdmin ou PGAdmin : [http://localhost:8080/](http://localhost:8080/)
 
-Utilisateur : **app_user**
+Utilisateur PHPMyAdmin : **app_user**
+
+Utilisateur PGAdmin : **user@pgadmin.org**
 
 Mot de passe : **supersecured**
 
